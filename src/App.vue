@@ -1,18 +1,33 @@
 <template>
+  <router-view id = "app" style="height: 100%"/>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <van-tabbar route>
+      <van-tabbar-item replace to='/' icon="home-o">Home</van-tabbar-item>
+      <van-tabbar-item replace to='/scan' icon="scan">Scan</van-tabbar-item>
+      <van-tabbar-item replace to='/cases' icon="chart-trending-o">Cases</van-tabbar-item>
+      <van-tabbar-item replace to='/apply' icon="qr">QR Code</van-tabbar-item>
+    </van-tabbar>
   </div>
-  <router-view/>
 </template>
+
+<script>
+import { ref } from 'vue';
+
+export default {
+  setup() {
+    const active = ref(0);
+    return { active };
+  },
+};
+</script>
 
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  /*color: #2c3e50;*/
+  background-color: #f7f8fa;
 }
 
 #nav {
