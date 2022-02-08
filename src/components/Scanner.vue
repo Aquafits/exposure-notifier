@@ -5,9 +5,6 @@
         <div style="color: red;" class="frame"></div>
       </qr-stream>
     </div>
-    <div class="result">
-      Result: {{ api }}
-    </div>
   </div>
 </template>
 
@@ -20,13 +17,14 @@ export default {
   components: {
     QrStream,
   },
-  setup() {
+  setup(props, context) {
+    // scanner
     const apiReactive = reactive({
       api: null,
     });
 
     function onDecode(api) {
-      apiReactive.api = api;
+      context.emit('onDecode', api);
     }
 
     return {
@@ -47,15 +45,14 @@ export default {
 
 <style scoped>
 .stream {
-  max-height: 500px;
-  max-width: 500px;
+  max-height: 50vh;
   margin: auto;
 }
 
 .frame {
   border-style: solid;
   border-width: 2px;
-  border-color: red;
+  border-color: cornflowerblue;
   height: 150px;
   width: 150px;
   position: absolute;

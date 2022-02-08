@@ -1,13 +1,16 @@
 <template>
-  <router-view id = "app" style="height: 100%"/>
-  <div id="nav">
-    <van-tabbar route>
-      <van-tabbar-item replace to='/' icon="home-o">Home</van-tabbar-item>
-      <van-tabbar-item replace to='/scan' icon="scan">Scan</van-tabbar-item>
-      <van-tabbar-item replace to='/cases' icon="chart-trending-o">Cases</van-tabbar-item>
-      <van-tabbar-item replace to='/apply' icon="qr">QR Code</van-tabbar-item>
-    </van-tabbar>
+  <div id="app">
+    <router-view id ="router-view"/>
+    <div id="nav">
+      <van-tabbar route>
+        <van-tabbar-item replace to='/' icon="home-o">Home</van-tabbar-item>
+        <van-tabbar-item replace to='/scan' icon="scan">Scan</van-tabbar-item>
+        <van-tabbar-item replace to='/cases' icon="chart-trending-o">Cases</van-tabbar-item>
+        <van-tabbar-item replace to='/apply' icon="qr">QR Code</van-tabbar-item>
+      </van-tabbar>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -28,6 +31,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   /*color: #2c3e50;*/
   background-color: #f7f8fa;
+  height: 100vh;
 }
 
 #nav {

@@ -8,6 +8,7 @@ import {
   Field,
   Icon,
   NavBar,
+  Popup,
   Tabbar,
   TabbarItem,
 } from 'vant';
@@ -29,6 +30,7 @@ app
   .use(Field)
   .use(Form)
   .use(NavBar)
+  .use(Popup)
   .use(Tabbar)
   .use(TabbarItem);
 

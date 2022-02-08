@@ -8,16 +8,16 @@ class RecordService {
     });
   }
 
-  getIndexForLocations(location) {
-    return this.httpclient.post('/record/getIndexForLocations', location);
+  getIndexForLocations(locationInfoDTO) {
+    return this.httpclient.post('/record/getIndexForLocations', locationInfoDTO);
   }
 
-  uploadRecord(record) {
-    return this.httpclient.post('/record/uploadRecord', record);
+  uploadRecord(recordDTO) {
+    return this.httpclient.post('/record/uploadRecord', recordDTO);
   }
 
-  uploadStatus(status) {
-    return this.httpclient.post('/record/uploadStatus', status);
+  uploadStatus(statusDTO) {
+    return this.httpclient.post('/record/uploadStatus', statusDTO);
   }
 }
 
