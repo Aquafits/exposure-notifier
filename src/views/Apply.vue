@@ -4,7 +4,7 @@
     <van-cell-group title='Location' inset>
       <GMapMap
         ref='locator'
-        :center="{'lat': 34.03, 'lng': -118.24}"
+        :center="{'lat': 33.676194, 'lng': -117.867329}"
         :zoom="9"
         :options="{
                       zoomControl: true,
@@ -15,7 +15,6 @@
                       fullscreenControl: false,
                       gestureHandling: 'greedy',
                 }"
-        style='height: 24vh'
       >
         <GMapMarker :position='center'></GMapMarker>
       </GMapMap>
@@ -62,8 +61,8 @@ export default {
   },
   setup() {
     // create google map
-    const lat = ref(34.03);
-    const lng = ref(-118.24);
+    const lat = ref(33.676194);
+    const lng = ref(-117.867329);
     navigator.geolocation.getCurrentPosition((position) => {
       lat.value = position.coords.latitude;
       lng.value = position.coords.longitude;

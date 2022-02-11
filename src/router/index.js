@@ -25,6 +25,11 @@ const routes = [
     name: 'Apply',
     component: () => import(/* webpackChunkName: "scan" */ '../views/Apply.vue'),
   },
+  {
+    path: '/case',
+    name: 'Case',
+    component: () => import(/* webpackChunkName: "scan" */ '../views/Case.vue'),
+  },
 ];
 
 const router = createRouter({

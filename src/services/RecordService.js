@@ -8,6 +8,11 @@ class RecordService {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getHeapMap() {
+    // return this.httpclient.get('/record/getHeatMap');
+  }
+
   getIndexForLocations(locationInfoDTO) {
     return this.httpclient.post('/record/getIndexForLocations', locationInfoDTO);
   }
