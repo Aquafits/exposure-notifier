@@ -26,7 +26,7 @@
 
 <script>
 import {
-  ref, computed, watch,
+  ref, computed, watch, onMounted,
 } from 'vue';
 // import RecordService from '@/services/RecordService';
 
@@ -44,6 +44,11 @@ export default {
       lat: Number(lat.value),
       lng: Number(lng.value),
     }));
+    onMounted(() => {
+      // don't modify this, solved a bug with map height
+      document.querySelector('.vue-map').id = 'vue-map';
+      document.getElementById('vue-map').style.minHeight = '50vh';
+    });
 
     // create heat data
     const heatmap = ref();
@@ -104,9 +109,6 @@ export default {
 </script>
 
 <style>
-.vue-map {
-  min-height: 50vh;
-}
 canvas {
   -webkit-touch-callout: default;
 }

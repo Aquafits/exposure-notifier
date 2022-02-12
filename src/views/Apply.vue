@@ -4,7 +4,7 @@
     <van-cell-group title='Location' inset>
       <GMapMap
         ref='locator'
-        :center="{'lat': 33.676194, 'lng': -117.867329}"
+        :center="center"
         :zoom="9"
         :options="{
                       zoomControl: true,
@@ -16,14 +16,23 @@
                       gestureHandling: 'greedy',
                 }"
       >
-        <GMapMarker :position='center'></GMapMarker>
+        <GMapMarker :position='location'
+                    :icon= '{
+                      url: require("../assets/Location.svg"),
+                      scaledSize: {width:15, height: 15},
+                      alpha: 0.5
+                    }'
+        >
+        </GMapMarker>
+        <GMapMarker :position='center' style="z-index: 200"></GMapMarker>
+
       </GMapMap>
     </van-cell-group>
 
     <van-form @submit='getIndexForLocations'>
       <van-cell-group title='Address' inset>
-        <van-field v-model='lat' label='Latitude' name='latitude'/>
-        <van-field v-model='lng' label='Longitude' name='longitude'/>
+        <van-field v-model='markerLat' label='Latitude' name='latitude'/>
+        <van-field v-model='markerLng' label='Longitude' name='longitude'/>
         <van-field v-model='country' label='Country' name='county'/>
         <van-field v-model='state' label='State' name='state'/>
         <van-field v-model='zipcode' label='Zipcode' name='zipcode'/>
@@ -49,7 +58,7 @@
 
 <script>
 import {
-  ref, computed, watch,
+  ref, computed, watch, onMounted,
 } from 'vue';
 import RecordService from '@/services/RecordService';
 import vueQr from 'vue-qr/src/packages/vue-qr.vue';
@@ -61,25 +70,34 @@ export default {
   },
   setup() {
     // create google map
-    const lat = ref(33.676194);
-    const lng = ref(-117.867329);
+    const location = ref({ lat: 200, lng: 200 });
     navigator.geolocation.getCurrentPosition((position) => {
-      lat.value = position.coords.latitude;
-      lng.value = position.coords.longitude;
+      console.log(position.coords);
+      location.value.lat = position.coords.latitude;
+      location.value.lng = position.coords.longitude;
+      console.log(location.value);
     });
+
+    const markerLat = ref(location.value.lat === 200 ? 33.676194 : location.value.lat);
+    const markerLng = ref(location.value.lng === 200 ? -117.867329 : location.value.lng);
     const center = computed(() => ({
-      lat: Number(lat.value),
-      lng: Number(lng.value),
+      lat: Number(markerLat.value),
+      lng: Number(markerLng.value),
     }));
+    onMounted(() => {
+      // don't modify this, solved a bug with map height
+      document.querySelector('.vue-map').id = 'vue-map';
+      document.getElementById('vue-map').style.minHeight = '24vh';
+    });
 
     const locator = ref();
     watch(locator, (googleMap) => {
       if (googleMap) {
         googleMap.$mapPromise.then((map) => {
-          map.addListener('center_changed', () => {
+          map.addListener('dragend', () => {
             const latlng = map.getCenter();
-            lat.value = latlng.lat();
-            lng.value = latlng.lng();
+            markerLat.value = latlng.lat();
+            markerLng.value = latlng.lng();
           });
         });
       }
@@ -109,8 +127,9 @@ export default {
     return {
       // google map
       locator,
-      lat,
-      lng,
+      location,
+      markerLat,
+      markerLng,
       center,
       // form
       country,
@@ -127,10 +146,6 @@ export default {
 </script>
 
 <style>
-.vue-map {
-  min-height: 25vh;
-}
-
 .van-popup {
   text-align: center;
 }

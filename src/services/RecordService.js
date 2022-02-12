@@ -3,7 +3,7 @@ import axios from 'axios';
 class RecordService {
   constructor() {
     this.httpclient = axios.create({
-      baseURL: 'http://34.134.185.2/record',
+      baseURL: 'https://macoredroid295homework.com/record',
       headers: { 'Content-type': 'application/json' },
     });
   }
