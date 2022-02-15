@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-nav-bar title='Case Stats'/>
-    <van-cell-group title='Heatmap' inset>
+    <van-cell-group title='Active Cases' inset>
       <GMapMap
         ref='heatmap'
         :center="{'lat': 33.676194, 'lng': -117.867329}"
@@ -18,6 +18,11 @@
       >
         <GMapHeatmap :data="heatData"></GMapHeatmap>
       </GMapMap>
+      <van-cell title="Date range" :value="dateRange" @click="showPickDate = true" />
+      <van-calendar v-model:show="showPickDate"
+                    type="range"
+                    color="#1989fa"
+                    @confirm="onDateRangeChange" />
     </van-cell-group>
 
   </div>
@@ -28,6 +33,7 @@
 import {
   ref, computed, watch, onMounted,
 } from 'vue';
+import RecordService from '@/services/RecordService';
 // import RecordService from '@/services/RecordService';
 
 export default {
@@ -51,6 +57,14 @@ export default {
     });
 
     // create heat data
+    const dateRange = ref('Today');
+    const showPickDate = ref(false);
+    const formatDate = (date) => `${date.getMonth() + 1}/${date.getDate()}`;
+    const onDateRangeChange = (range) => {
+      const [start, end] = range;
+      showPickDate.value = false;
+      dateRange.value = `${formatDate(start)} - ${formatDate(end)}`;
+    };
     const heatmap = ref();
     const heatData = ref([]);
     const googlize = (e) => ({
@@ -63,35 +77,17 @@ export default {
     watch(heatmap, (googleMap) => {
       if (googleMap) {
         googleMap.$mapPromise.then(() => {
-          const response = {
-            data: {
-              heatMapDetailDTOS: [
-                {
-                  latitude: '33',
-                  locationId: '1',
-                  longitude: '-117',
-                  number: '1',
-                  statics: [
-                    0,
-                  ],
-                },
-                {
-                  latitude: '33.4',
-                  locationId: '4',
-                  longitude: '-117.04',
-                  number: '1',
-                  statics: [
-                    1,
-                  ],
-                },
-              ],
-            },
-          };
-          const rawHeatData = response.data.heatMapDetailDTOS;
-          for (let i = 0; i < rawHeatData.length; i += 1) {
-            rawHeatData[i] = googlize(rawHeatData[i]);
-          }
-          heatData.value = rawHeatData;
+          RecordService.getHeatMapByActiveCases()
+            .then((response) => {
+              const rawHeatData = response.data.heatMapDetailDTOS;
+              for (let i = 0; i < rawHeatData.length; i += 1) {
+                rawHeatData[i] = googlize(rawHeatData[i]);
+              }
+              heatData.value = rawHeatData;
+            })
+            .catch((e) => {
+              console.log(e);
+            });
         });
       }
     });
@@ -103,6 +99,9 @@ export default {
       center,
       heatmap,
       heatData,
+      dateRange,
+      showPickDate,
+      onDateRangeChange,
     };
   },
 };

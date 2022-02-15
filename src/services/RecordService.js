@@ -8,9 +8,12 @@ class RecordService {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getHeapMap() {
-    // return this.httpclient.get('/record/getHeatMap');
+  getHeatMapByActiveCases() {
+    return this.httpclient.get('/record/getHeatMapByActiveCases');
+  }
+
+  getHeatMapByExposedCases() {
+    return this.httpclient.get('/record/getHeatMapByExposedCases');
   }
 
   getIndexForLocations(locationInfoDTO) {

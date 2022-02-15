@@ -3,15 +3,20 @@ import { createApp } from 'vue';
 import axios from 'axios';
 import {
   Button,
+  Calendar,
+  Cell,
   CellGroup,
   Form,
   Field,
   Icon,
+  Locale,
   NavBar,
   Popup,
   Tabbar,
   TabbarItem,
 } from 'vant';
+import enUS from 'vant/es/locale/lang/en-US';
+
 import VueGoogleMaps from '@fawmi/vue-google-maps';
 
 import VueAxios from 'vue-axios';
@@ -20,11 +25,15 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store';
 
+Locale.use('en-US', enUS);
+
 const app = createApp(App);
 
 // import vant 3
 app
   .use(Button)
+  .use(Calendar)
+  .use(Cell)
   .use(CellGroup)
   .use(Icon)
   .use(Field)
