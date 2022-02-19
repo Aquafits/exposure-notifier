@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 
 import axios from 'axios';
 import {
+  ActionSheet,
   Button,
   Calendar,
   Cell,
@@ -12,6 +13,7 @@ import {
   Locale,
   NavBar,
   Popup,
+  Switch,
   Tabbar,
   TabbarItem,
 } from 'vant';
@@ -31,6 +33,7 @@ const app = createApp(App);
 
 // import vant 3
 app
+  .use(ActionSheet)
   .use(Button)
   .use(Calendar)
   .use(Cell)
@@ -40,6 +43,7 @@ app
   .use(Form)
   .use(NavBar)
   .use(Popup)
+  .use(Switch)
   .use(Tabbar)
   .use(TabbarItem);
 

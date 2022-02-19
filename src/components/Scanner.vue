@@ -2,7 +2,7 @@
   <div>
     <div class="center stream">
       <qr-stream @decode="onDecode" class="mb">
-        <div style="color: red;" class="frame"></div>
+        <div class="frame"></div>
       </qr-stream>
     </div>
   </div>
@@ -14,6 +14,7 @@ import { QrStream } from 'vue3-qr-reader';
 
 export default {
   name: 'Scanner',
+  emits: ['decode'],
   components: {
     QrStream,
   },
@@ -24,20 +25,12 @@ export default {
     });
 
     function onDecode(api) {
-      context.emit('onDecode', api);
+      context.emit('decode', api);
     }
 
     return {
       ...toRefs(apiReactive),
       onDecode,
-    };
-  },
-  data() {
-    return {
-      record: {
-        locationId: null,
-        string: null,
-      },
     };
   },
 };

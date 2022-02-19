@@ -24,9 +24,7 @@
                     color="#1989fa"
                     @confirm="onDateRangeChange" />
     </van-cell-group>
-
   </div>
-
 </template>
 
 <script>
@@ -34,10 +32,9 @@ import {
   ref, computed, watch, onMounted,
 } from 'vue';
 import RecordService from '@/services/RecordService';
-// import RecordService from '@/services/RecordService';
 
 export default {
-  name: 'Case.vue',
+  name: 'Case',
   setup() {
     // create google map
     const lat = ref(34.03);

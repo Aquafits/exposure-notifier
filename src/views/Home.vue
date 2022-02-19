@@ -1,39 +1,147 @@
 <template>
   <div>
-    <van-cell-group title='Your status' style="background: #f7f8fa" inset>
-      <div style="text-align: center">
-        <van-icon name="success" size="28vh" style="color: #42b983"/>
-      </div>
+    <div style="padding-top: 2.5vh">
+      <van-cell-group title='Your status' class="status-panel" inset>
+        <van-icon :name="statusIcon" size="28vh" :color="statusColor"/>
+      </van-cell-group>
+      <LoginCell @login="onLogin" @logout="onLogout"/>
+    </div>
+
+    <van-cell-group title='Cases' style="background: #f7f8fa" inset>
+      <van-cell is-link title="Within" value="California"/>
+      <van-cell center title="Only Yesterday">
+        <template #right-icon>
+          <van-switch v-model="onlyYesterday" size="24"/>
+        </template>
+      </van-cell>
+      <van-cell title="Active cases"
+                :value="onlyYesterday ? activeCasesYesterday: activeCases"/>
+      <van-cell title="Active cases around you"
+                :value=" onlyYesterday? activeCasesYesterdayAroundYou: activeCasesYesterday"/>
     </van-cell-group>
 
-    <van-cell-group title='News' style="background: #f7f8fa" inset>
-      <van-cell title="Active cases" value="66"/>
-      <van-cell title="Positive cases yesterday" value="6"/>
-      <van-cell title="Active cases around you" value="66"/>
-      <van-cell title="Positive cases yesterday around you" value="6"/>
-    </van-cell-group>
+    <div v-if="store.state.loggedIn">
+      <van-cell-group title="Volunteer test report" style="background: #f7f8fa" inset>
+        <div style='margin: 16px;'>
+          <van-button round block type='success'>
+            Negative
+          </van-button>
+        </div>
+        <div style='margin: 16px;'>
+          <van-button round block type='danger'>
+            Positive
+          </van-button>
+        </div>
+      </van-cell-group>
+    </div>
 
-    <van-cell-group title='Self report test status' inset>
-      <van-field v-model='email' label="Email" name="email"
-                 placeholder='email used during past visits'/>
-    </van-cell-group>
-    <div style='margin: 16px;'>
-      <van-button round block type='success'>
-        Negative
-      </van-button>
-    </div>
-    <div style='margin: 16px;'>
-      <van-button round block type='warning'>
-        Positive
-      </van-button>
-    </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 
+import { computed, ref } from 'vue';
+import { useStore } from 'vuex';
+import LoginCell from '@/components/LoginCell.vue';
+import RecordService from '@/services/RecordService';
+
 export default {
   name: 'Home',
+  components: { LoginCell },
+  setup() {
+    const store = useStore();
+
+    // your status
+    const statusIcon = computed(() => store.state.exposureStatus.icon);
+    const statusColor = computed(() => store.state.exposureStatus.color);
+    const statusVisualization = new Map([
+      ['UNKNOWN', {
+        status: 'UNKNOWN',
+        icon: 'success',
+        color: '#07c160',
+      }],
+      ['EXPOSED', {
+        status: 'EXPOSED',
+        icon: 'fail',
+        color: '#ff976a',
+      }],
+      ['ACTIVE', {
+        status: 'ACTIVE',
+        icon: 'circle',
+        color: '#ee0a24',
+      }],
+    ]);
+    const onLogin = () => {
+      RecordService.getStatus({ email: store.state.currentUser.email })
+        .then((response) => {
+          let status = response.data;
+          if (!statusVisualization.has(status)) {
+            status = 'UNKNOWN';
+          }
+          store.commit('setExposureStatus', statusVisualization.get(status));
+        })
+        .catch((e) => {
+          if (e.response) {
+            // if email not exist (bad request)
+            if (e.response.status === 400) {
+              store.commit('setExposureStatus', statusVisualization.get('UNKNOWN'));
+            }
+          }
+        });
+    };
+    const onLogout = () => {
+      store.commit('resetExposureStatus');
+    };
+
+    // news
+    const geoPermission = ref(false);
+    const onlyYesterday = ref(true);
+    const activeCases = ref(0);
+    const activeCasesAroundYou = ref(0);
+    const activeCasesYesterday = ref(0);
+    const activeCasesYesterdayAroundYou = ref(0);
+    navigator.geolocation.getCurrentPosition((position) => {
+      geoPermission.value = true;
+      RecordService.getDailyCases({
+        latitude: String(position.coords.latitude),
+        longitude: String(position.coords.latitude),
+      })
+        .then((response) => {
+          const { data } = response;
+          activeCases.value = data.activeCases;
+          activeCasesAroundYou.value = data.activeCasesAroundYou;
+          activeCasesYesterday.value = data.activeCasesYesterday;
+          activeCasesYesterdayAroundYou.value = data.activeCasesYesterdayAroundYou;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }, () => {
+      geoPermission.value = false;
+    });
+
+    return {
+      store,
+      statusIcon,
+      statusColor,
+      onLogin,
+      onLogout,
+
+      geoPermission,
+      onlyYesterday,
+      activeCases,
+      activeCasesAroundYou,
+      activeCasesYesterday,
+      activeCasesYesterdayAroundYou,
+    };
+  },
 };
 </script>
+
+<style>
+.status-panel {
+  background: #f7f8fa;
+  text-align: center;
+}
+</style>

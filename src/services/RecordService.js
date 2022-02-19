@@ -8,6 +8,14 @@ class RecordService {
     });
   }
 
+  getDailyCases(dailyCasesDTO) {
+    return this.httpclient.post('/record/getDailyCases', dailyCasesDTO);
+  }
+
+  getStatus(getStatusDTO) {
+    return this.httpclient.post('/record/getStatus', getStatusDTO);
+  }
+
   getHeatMapByActiveCases() {
     return this.httpclient.get('/record/getHeatMapByActiveCases');
   }

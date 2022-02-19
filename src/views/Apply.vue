@@ -42,7 +42,7 @@
       </van-cell-group>
       <div style='margin: 16px;'>
         <van-button round block type='primary' native-type='submit'>
-          Submit
+          Confirm
         </van-button>
       </div>
     </van-form>
@@ -64,7 +64,7 @@ import RecordService from '@/services/RecordService';
 import vueQr from 'vue-qr/src/packages/vue-qr.vue';
 
 export default {
-  name: 'Apply.vue',
+  name: 'Apply',
   components: {
     vueQr,
   },
@@ -72,10 +72,10 @@ export default {
     // create google map
     const location = ref({ lat: 200, lng: 200 });
     navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position.coords);
+      // console.log(position.coords);
       location.value.lat = position.coords.latitude;
       location.value.lng = position.coords.longitude;
-      console.log(location.value);
+      // console.log(location.value);
     });
 
     const markerLat = ref(location.value.lat === 200 ? 33.676194 : location.value.lat);
@@ -110,14 +110,14 @@ export default {
     const type = ref('');
     const zipcode = ref('');
     const showQRCode = ref(false);
-    const urlOfQRCode = ref('http://192.168.0.94:8080/#/scan');
+    const urlOfQRCode = ref('https://192.168.0.94:8080/#/scan');
     const getIndexForLocations = (locationInfoDTO) => {
       // console.log('submit locationInfoDTO', locationInfoDTO);
       RecordService.getIndexForLocations(locationInfoDTO)
         .then((response) => {
           showQRCode.value = true;
           const locationId = response.data;
-          urlOfQRCode.value = `http://192.168.0.94:8080/#/scan/${locationId}`;
+          urlOfQRCode.value = `https://192.168.0.94:8080/#/scan/${locationId}`;
         })
         .catch((e) => {
           console.log(e);
