@@ -53,7 +53,7 @@ app.use(VueAxios, { $httpclient: axios });
 // import google map, thanks to https://vue-map.netlify.app/
 app.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyB6h2oNIEeArQyATIOK3ckcXmWeBX5f-Jw',
+    key: 'AIzaSyCqhifzJk_S6qkPv8gWs7cSemBvDpfR4II',
     libraries: 'visualization',
   },
 });

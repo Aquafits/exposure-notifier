@@ -33,7 +33,7 @@
       <van-cell-group title='Address' inset>
         <van-field v-model='markerLat' label='Latitude' name='latitude'/>
         <van-field v-model='markerLng' label='Longitude' name='longitude'/>
-        <van-field v-model='country' label='Country' name='county'/>
+        <van-field v-model='county' label='County' name='county'/>
         <van-field v-model='state' label='State' name='state'/>
         <van-field v-model='zipcode' label='Zipcode' name='zipcode'/>
         <van-field v-model='name' label='Place name' name='name'/>
@@ -103,21 +103,21 @@ export default {
       }
     });
 
-    // submit form to get location id
-    const country = ref('United States');
+    // submit form to get location id and QR Code
+    const county = ref('California');
     const name = ref('');
     const state = ref('');
     const type = ref('');
     const zipcode = ref('');
     const showQRCode = ref(false);
-    const urlOfQRCode = ref('https://192.168.0.94:8080/#/scan');
+    const urlOfQRCode = ref('https://macoredroid295homework.com/#/scan');
     const getIndexForLocations = (locationInfoDTO) => {
       // console.log('submit locationInfoDTO', locationInfoDTO);
       RecordService.getIndexForLocations(locationInfoDTO)
         .then((response) => {
           showQRCode.value = true;
           const locationId = response.data;
-          urlOfQRCode.value = `https://192.168.0.94:8080/#/scan/${locationId}`;
+          urlOfQRCode.value = `https://macoredroid295homework.com/#/scan/${locationId}`;
         })
         .catch((e) => {
           console.log(e);
@@ -132,7 +132,7 @@ export default {
       markerLng,
       center,
       // form
-      country,
+      county,
       name,
       state,
       type,

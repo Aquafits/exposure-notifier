@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="padding-top: 2.5vh">
-      <van-cell-group title='Your status' class="status-panel" inset>
+      <van-cell-group :title="`Your status: ${statusString}`" class="status-panel" inset>
         <van-icon :name="statusIcon" size="25vh" :color="statusColor"/>
       </van-cell-group>
       <LoginCell @login="onLogin" @logout="onLogout"/>
@@ -58,6 +58,7 @@ import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import LoginCell from '@/components/LoginCell.vue';
 import RecordService from '@/services/RecordService';
+import { Toast } from 'vant/lib/';
 
 export default {
   name: 'Home',
@@ -66,21 +67,27 @@ export default {
     const store = useStore();
 
     // your status
+    const statusString = computed(() => store.state.exposureStatus.status);
     const statusIcon = computed(() => store.state.exposureStatus.icon);
     const statusColor = computed(() => store.state.exposureStatus.color);
     const statusVisualization = new Map([
       ['UNKNOWN', {
-        status: 'UNKNOWN',
+        status: 'Unknown',
+        icon: 'minus',
+        color: '#c8c9cc',
+      }],
+      ['OK', {
+        status: 'Ok',
         icon: 'success',
         color: '#07c160',
       }],
       ['EXPOSED', {
-        status: 'EXPOSED',
+        status: 'Exposed',
         icon: 'fail',
         color: '#ff976a',
       }],
       ['ACTIVE', {
-        status: 'ACTIVE',
+        status: 'Active',
         icon: 'circle',
         color: '#ee0a24',
       }],
@@ -91,6 +98,8 @@ export default {
           let status = response.data;
           if (!statusVisualization.has(status)) {
             status = 'UNKNOWN';
+          } else if (status === 'UNKNOWN') {
+            status = 'OK';
           }
           store.commit('setExposureStatus', statusVisualization.get(status));
         })
@@ -148,15 +157,20 @@ export default {
         timestamp: '',
       })
         .then((response) => {
-          console.log('Exposed demo: ', response.data);
+          console.log('Exposed people: ', response.data);
+          Toast.success('submitted');
+          showConfirm.value = false;
         })
+        .then(() => onLogin())
         .catch((e) => {
           console.log(e);
+          Toast.fail('failed to submit');
         });
     };
 
     return {
       store,
+      statusString,
       statusIcon,
       statusColor,
       onLogin,
