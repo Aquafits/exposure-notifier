@@ -18,11 +18,13 @@
       >
         <GMapHeatmap :data="heatData"></GMapHeatmap>
       </GMapMap>
-      <van-cell title="Date range" :value="dateRange" @click="showPickDate = true" />
+      <van-cell title="Date range" :value="dateRange" @click="showPickDate = true"/>
       <van-calendar v-model:show="showPickDate"
                     type="range"
                     color="#1989fa"
-                    @confirm="onDateRangeChange" />
+                    :min-date="minDate"
+                    :max-date="maxDate"
+                    @confirm="onDateRangeChange"/>
     </van-cell-group>
   </div>
 </template>
@@ -55,6 +57,8 @@ export default {
 
     // create heat data
     const dateRange = ref('Today');
+    const minDate = ref(new Date(2019, 1, 1));
+    const maxDate = ref(new Date());
     const showPickDate = ref(false);
     const formatDate = (date) => `${date.getMonth() + 1}/${date.getDate()}`;
     const onDateRangeChange = (range) => {
@@ -66,7 +70,10 @@ export default {
     const heatData = ref([]);
     const googlize = (e) => ({
       location: new window.google.maps.LatLng(
-        { lat: Number(e.latitude), lng: Number(e.longitude) },
+        {
+          lat: Number(e.latitude),
+          lng: Number(e.longitude),
+        },
       ),
       weight: Number(e.number),
     });
@@ -97,6 +104,8 @@ export default {
       heatmap,
       heatData,
       dateRange,
+      minDate,
+      maxDate,
       showPickDate,
       onDateRangeChange,
     };
