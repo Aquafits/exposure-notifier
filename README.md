@@ -36,7 +36,7 @@
 
 
   <p align="center">
-    An COVID Exposure Notifier!
+    An awesome COVID Exposure Notifier!
     <br />
     <br />
     <a href="https://macoredroid295homework.com/#/">View Demo</a>
