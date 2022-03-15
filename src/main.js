@@ -22,12 +22,32 @@ import enUS from 'vant/es/locale/lang/en-US';
 import VueGoogleMaps from '@fawmi/vue-google-maps';
 
 import VueAxios from 'vue-axios';
-import App from './App.vue';
 import './registerServiceWorker';
-import router from './router';
+
+import ECharts from 'vue-echarts';
+import { use } from 'echarts/core';
+import {
+  CanvasRenderer,
+} from 'echarts/renderers';
+import {
+  LineChart,
+} from 'echarts/charts';
+import {
+  GridComponent,
+  TooltipComponent,
+} from 'echarts/components';
 import store from './store';
+import router from './router';
+import App from './App.vue';
 
 Locale.use('en-US', enUS);
+
+use([
+  CanvasRenderer,
+  LineChart,
+  GridComponent,
+  TooltipComponent,
+]);
 
 const app = createApp(App);
 
@@ -53,10 +73,13 @@ app.use(VueAxios, { $httpclient: axios });
 // import google map, thanks to https://vue-map.netlify.app/
 app.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyCqhifzJk_S6qkPv8gWs7cSemBvDpfR4II',
+    key: 'YOUR_API_KEY',
     libraries: 'visualization',
   },
 });
+
+// add vue-echarts
+app.component('v-chart', ECharts);
 
 app.use(store)
   .use(router)
