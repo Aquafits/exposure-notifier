@@ -200,8 +200,6 @@ Project Link: [https://github.com/justsayyes271/exposure-notifier](https://githu
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
 * [Iconfont](https://www.iconfont.cn/)
 * [Iconoir](https://iconoir.com/)
 * [Awesome Readme](https://github.com/othneildrew/Best-README-Template)
