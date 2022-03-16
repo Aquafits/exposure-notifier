@@ -26,7 +26,7 @@
 <br />
 
 <div align="center">
-  <a href="https://github.com/justsayyes271/exposure-notifier">
+  <a href="https://github.com/covidexposure295/exposure-notifier">
         <img src="readme-images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -115,7 +115,7 @@ This is an example of how to list things you need to use the software and how to
 1. Get a free API Key at Google Maps Platform [Google Maps Platform](https://developers.google.com/maps/documentation/javascript/)
 2. Clone the repo
    ```sh
-   git clone https://github.com/justsayyes271/exposure-notifier.git
+   git clone https://github.com/covidexposure295/exposure-notifier
    ```
 3. Install NPM packages
    ```sh
@@ -191,7 +191,7 @@ Distributed under the GPLv3 License. See `LICENSE.txt` for more information.
 
 Haomin Qiu - haominqiu@gmail.com
 
-Project Link: [https://github.com/justsayyes271/exposure-notifier](https://github.com/justsayyes271/exposure-notifier)
+Project Link: [https://github.com/covidexposure295/exposure-notifier](https://github.com/covidexposure295/exposure-notifier)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
